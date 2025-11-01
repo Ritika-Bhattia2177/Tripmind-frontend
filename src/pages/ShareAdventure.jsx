@@ -8,7 +8,14 @@ export default function ShareAdventure(){
   const [form, setForm] = useState({ name: '', destination: '', startDate: '', endDate: '', story: '' })
   const [photo, setPhoto] = useState(null)
   const [photoPreview, setPhotoPreview] = useState(null)
-  const [submitted, setSubmitted] = useState(null)
+  const [submittedStories, setSubmittedStories] = useState([])
+  
+  // Clear stories when navigating away
+  React.useEffect(() => {
+    return () => {
+      setSubmittedStories([])
+    }
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -27,16 +34,25 @@ export default function ShareAdventure(){
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!form.name.trim() || !form.destination.trim() || !form.startDate || !form.endDate || !form.story.trim()) return
-    const newAdventure = { ...form, photo: photoPreview }
-    // Save to localStorage
-    const prev = localStorage.getItem('sharedAdventures')
-    const adventures = prev ? JSON.parse(prev) : []
-    localStorage.setItem('sharedAdventures', JSON.stringify([newAdventure, ...adventures]))
-    setSubmitted(newAdventure)
-    setTimeout(() => navigate('/community'), 1200)
+    
+    const newAdventure = { 
+      ...form, 
+      photo: photoPreview,
+      id: Date.now() // Add unique ID
+    }
+    
+    // Add to local state (not localStorage - only temporary)
+    setSubmittedStories(prev => [newAdventure, ...prev])
+    
+    // Reset form
     setForm({ name: '', destination: '', startDate: '', endDate: '', story: '' })
     setPhoto(null)
     setPhotoPreview(null)
+    
+    // Scroll to see the new story
+    setTimeout(() => {
+      document.getElementById('stories-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
   }
 
   const isValid = form.name.trim() && form.destination.trim() && form.startDate && form.endDate && form.story.trim()
@@ -207,46 +223,76 @@ export default function ShareAdventure(){
           </div>
         </motion.div>
 
+        {/* Submitted Stories Section */}
+        {submittedStories.length > 0 && (
+          <motion.div
+            id="stories-section"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-12"
+          >
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 bg-clip-text text-transparent mb-2">
+                Your Shared Stories
+              </h2>
+              <p className="text-slate-600">
+                Stories you share here will be visible only on this page and will disappear when you navigate away
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-8">
+              {submittedStories.map((story) => (
+                <motion.div
+                  key={story.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-2xl shadow-2xl overflow-hidden bg-white border-2 border-purple-100 hover:border-purple-300 transition-all duration-300"
+                >
+                  {story.photo && (
+                    <div className="relative h-72 md:h-96">
+                      <img src={story.photo} alt={story.destination} className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <div className="flex items-center gap-2 text-white mb-2">
+                          <MapPin className="w-5 h-5 text-cyan-300" />
+                          <span className="text-2xl md:text-3xl font-bold">{story.destination}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div className="p-6 md:p-8">
+                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                          {story.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="text-lg font-bold text-slate-800">{story.name}</div>
+                          <div className="text-sm text-slate-500 flex items-center gap-2">
+                            <Calendar className="w-4 h-4" />
+                            {story.startDate} → {story.endDate}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{story.story}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* Submitted Story Card */}
         <AnimatePresence>
-          {submitted && (
+          {false && (
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               className="mt-8"
             >
-              <div className="rounded-2xl shadow-2xl overflow-hidden bg-white border-2 border-indigo-100">
-                {submitted.photo && (
-                  <div className="relative h-72 md:h-96">
-                    <img src={submitted.photo} alt={submitted.destination} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="flex items-center gap-2 text-white mb-2">
-                        <MapPin className="w-5 h-5 text-cyan-300" />
-                        <span className="text-2xl md:text-3xl font-bold">{submitted.destination}</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center text-white font-bold text-lg">
-                        {submitted.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <div className="text-lg font-bold text-slate-800">{submitted.name}</div>
-                        <div className="text-sm text-slate-500 flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                          {submitted.startDate} → {submitted.endDate}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{submitted.story}</p>
-                </div>
-              </div>
+              {/* Old single story display - kept for backwards compatibility but disabled */}
             </motion.div>
           )}
         </AnimatePresence>

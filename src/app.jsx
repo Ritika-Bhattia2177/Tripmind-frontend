@@ -19,7 +19,6 @@ L.Icon.Default.mergeOptions({
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
 })
-import Footer from './components/Footer.jsx'
 import PlanTrip from './pages/PlanTrip.jsx'
 import Community from './pages/Community.jsx'
 import About from './pages/About.jsx'

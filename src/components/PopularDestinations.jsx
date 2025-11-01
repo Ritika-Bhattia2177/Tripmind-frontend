@@ -2,12 +2,36 @@ import React from 'react'
 import { motion } from 'framer-motion'
 
 const destinations = [
-  { city: 'Paris', tag: 'Romance, art & cafés.', img: 'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=6a2b8e8b6a0e1f1e8a3b3a6f2f8b4c7d' },
-  { city: 'Goa', tag: 'Beaches, nightlife & serenity.', img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=8c0a3d387f8c5b7a8f3b6f0e7a955f2e' },
-  { city: 'Bali', tag: 'Surfing, temples & rice terraces.', img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=4f3c8b6c3a1f0e1f2d3c4b5a6e7f8a9b' },
-  { city: 'Dubai', tag: 'Skyscrapers, desert & luxury.', img: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=3c6d5a7b2e8c9f0b1a2d3e4f5a6b7c8d' },
-  { city: 'Tokyo', tag: 'Neon streets & culinary delights.', img: 'https://images.unsplash.com/photo-1549693578-d683be217e58?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=7c9a8b6d5e4f3a2b1c0d9e8f7a6b5c4d' },
-  { city: 'Santorini', tag: 'Blue domes & stunning sunsets.', img: 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3' }
+  { 
+    city: 'Paris', 
+    tag: 'Romance, art & cafés.', 
+    img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&auto=format&fit=crop&q=80'
+  },
+  { 
+    city: 'Goa', 
+    tag: 'Beaches, nightlife & serenity.', 
+    img: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&auto=format&fit=crop&q=80'
+  },
+  { 
+    city: 'Bali', 
+    tag: 'Surfing, temples & rice terraces.', 
+    img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200&auto=format&fit=crop&q=80'
+  },
+  { 
+    city: 'Dubai', 
+    tag: 'Skyscrapers, desert & luxury.', 
+    img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&auto=format&fit=crop&q=80'
+  },
+  { 
+    city: 'Tokyo', 
+    tag: 'Neon streets & culinary delights.', 
+    img: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1200&auto=format&fit=crop&q=80'
+  },
+  { 
+    city: 'Santorini', 
+    tag: 'Blue domes & stunning sunsets.', 
+    img: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1200&auto=format&fit=crop&q=80'
+  }
 ];
 
 export default function PopularDestinations(){
